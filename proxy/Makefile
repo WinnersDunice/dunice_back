@@ -8,7 +8,7 @@ BINARY := service_auth
 SRC := cmd/main.go
 
 # Set the flags
-FLAGS := --port="8080"
+FLAGS := --port="7222"
 
 # Define the build target
 .PHONY: build

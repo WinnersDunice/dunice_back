@@ -34,13 +34,15 @@ func LoginHandler(store *sessions.CookieStore) http.HandlerFunc {
 		}
 
 		resp, err := http.Post(s.IPDB+"/users/auth", "application/json", bytes.NewBuffer(jsonData))
+		log.Print(resp)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("Error sending request: %s", err), http.StatusInternalServerError)
 			return
 		}
 		defer resp.Body.Close()
-
+		
 		if resp.StatusCode != http.StatusOK {
+			log.Print(resp.StatusCode)
 			http.Error(w, "Invalid credentials "+fmt.Sprintf("%d", resp.StatusCode), http.StatusUnauthorized)
 			return
 		}

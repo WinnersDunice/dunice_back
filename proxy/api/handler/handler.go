@@ -14,8 +14,9 @@ type Handler struct {
 }
 
 const (
-	IP        = "185.23.236.113"
+	IP        = "195.80.238.9"
 	UsersPort = "8003"
+	MongoPort = "8004"
 	SSOPort   = "8530"
 )
 
@@ -65,8 +66,14 @@ func (h *Handler) InitRoutes() *chi.Mux {
 
 	r.Post("/reg", (h.Register))
 
-	r.Get("/auth/yandex", (h.LoginYandex))
-
+	r.Post("/tables", h.CreateTable)
+	r.Post("/chairs", h.CreateChair)
+	r.Post("/equipment", h.CreateEquipment)
+	r.Post("/furniture", h.CreateFurniture)
+	r.Post("/kitchen", h.CreateKitchen)
+	r.Get("/belongsTo/{belongsTo}", h.GetObjectsByBelongsTo)
+	r.Get("/officeId/{officeId}", h.GetObjectsByOfficeID)
+	r.Delete("/{collection}/{id}", h.DeleteObjectByID)
 	r.Delete("/logout", (h.Logout))
 
 	return r

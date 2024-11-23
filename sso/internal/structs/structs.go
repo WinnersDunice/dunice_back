@@ -5,13 +5,15 @@ import (
 	"encoding/hex"
 )
 
-var IPDB string = "http://185.23.236.113:8003/database"
+var IPDB string = "http://195.80.238.9:8003/database"
 
 type User struct {
-	Email    string `json:"email"`
-	UserID   int    `json:"id"`
-	Password string `json:"password"`
-	Role     int    `json:"privilege_level"`
+	Login    string `json:"login"`
+	Password   string `json:"password"`
+	Name       string `json:"name"`
+	Surname    string `json:"surname"`
+	Middlename string `json:"middlename"`
+	MacAddress string `json:"mac_address"`
 }
 
 func HashPassword(password string) string {

@@ -1,10 +1,12 @@
 package entities
 
 type SmallUser struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	UserID   int    `json:"id"`
-	Password string `json:"password"`
+	Login    string `json:"login"`
+	Password   string `json:"password"`
+	Name       string `json:"name"`
+	Surname    string `json:"surname"`
+	Middlename string `json:"middlename"`
+	MacAddress string `json:"mac_address"`
 	Role     int    `json:"privilege_level"`
 }
 

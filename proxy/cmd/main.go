@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	port := flag.String("port", "8080", "port of the server")
+	port := flag.String("port", "7222", "port of the server")
 	flag.Parse()
 	srv := new(service.Server)
 	//create handler
