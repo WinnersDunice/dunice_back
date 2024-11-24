@@ -421,7 +421,7 @@ func Rout(db *sql.DB) error {
 	})
 
 	// Get all users of an office
-	v2.Get("/offices/{officeid}/users", func(w http.ResponseWriter, r *http.Request) {
+	v2.Get("/{officeid}/users", func(w http.ResponseWriter, r *http.Request) {
 		log.Print("y")
 		officeidStr := chi.URLParam(r, "officeid")
 		officeid, err := strconv.Atoi(officeidStr)

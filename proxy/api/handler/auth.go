@@ -64,6 +64,8 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	var user entities.SmallUser
 	err := json.NewDecoder(r.Body).Decode(&user)
+	log.Print(user)
+	log.Print(err)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Error: %v", err), http.StatusBadRequest)
 		return

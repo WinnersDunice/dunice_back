@@ -19,20 +19,7 @@ func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
@@ -47,20 +34,7 @@ func (h *Handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
@@ -75,20 +49,7 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
@@ -110,20 +71,7 @@ func (h *Handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) GetUserByLogin(w http.ResponseWriter, r *http.Request) {
@@ -138,20 +86,7 @@ func (h *Handler) GetUserByLogin(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) UpdateUserLogin(w http.ResponseWriter, r *http.Request) {
@@ -166,20 +101,7 @@ func (h *Handler) UpdateUserLogin(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) UpdateUserPassword(w http.ResponseWriter, r *http.Request) {
@@ -194,20 +116,7 @@ func (h *Handler) UpdateUserPassword(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) UpdateUserMacAddress(w http.ResponseWriter, r *http.Request) {
@@ -222,20 +131,7 @@ func (h *Handler) UpdateUserMacAddress(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) GetUserLogin(w http.ResponseWriter, r *http.Request) {
@@ -250,20 +146,7 @@ func (h *Handler) GetUserLogin(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) GetUserPassword(w http.ResponseWriter, r *http.Request) {
@@ -278,20 +161,7 @@ func (h *Handler) GetUserPassword(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) AuthUser(w http.ResponseWriter, r *http.Request) {
@@ -305,20 +175,7 @@ func (h *Handler) AuthUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) IsAdmin(w http.ResponseWriter, r *http.Request) {
@@ -334,20 +191,7 @@ func (h *Handler) IsAdmin(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) MakeAdmin(w http.ResponseWriter, r *http.Request) {
@@ -361,20 +205,7 @@ func (h *Handler) MakeAdmin(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) GetAllOffices(w http.ResponseWriter, r *http.Request) {
@@ -388,20 +219,7 @@ func (h *Handler) GetAllOffices(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) GetUsersByOfficeID(w http.ResponseWriter, r *http.Request) {
@@ -416,20 +234,7 @@ func (h *Handler) GetUsersByOfficeID(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) GetOfficeByUserID(w http.ResponseWriter, r *http.Request) {
@@ -444,20 +249,7 @@ func (h *Handler) GetOfficeByUserID(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) CreateOffice(w http.ResponseWriter, r *http.Request) {
@@ -471,22 +263,8 @@ func (h *Handler) CreateOffice(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
+	copyResponse(w, resp)
 
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
-
-	// Extract the office ID from the response body
 	var officeID struct {
 		ID int `json:"officeid"`
 	}
@@ -495,7 +273,6 @@ func (h *Handler) CreateOffice(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Return the office ID in the response
 	json.NewEncoder(w).Encode(map[string]int{"officeid": officeID.ID})
 }
 
@@ -511,20 +288,7 @@ func (h *Handler) GetOfficeByID(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) UpdateOffice(w http.ResponseWriter, r *http.Request) {
@@ -539,20 +303,7 @@ func (h *Handler) UpdateOffice(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
-	for k, v := range resp.Header {
-		for _, vv := range v {
-			w.Header().Add(k, vv)
-		}
-	}
-
-	// Copy the response status code
-	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
-	if resp.Body != http.NoBody {
-		io.Copy(w, resp.Body)
-	}
+	copyResponse(w, resp)
 }
 
 func (h *Handler) DeleteOffice(w http.ResponseWriter, r *http.Request) {
@@ -574,17 +325,16 @@ func (h *Handler) DeleteOffice(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Copy the response headers
+	copyResponse(w, resp)
+}
+
+func copyResponse(w http.ResponseWriter, resp *http.Response) {
 	for k, v := range resp.Header {
 		for _, vv := range v {
 			w.Header().Add(k, vv)
 		}
 	}
-
-	// Copy the response status code
 	w.WriteHeader(resp.StatusCode)
-
-	// Copy the response body
 	if resp.Body != http.NoBody {
 		io.Copy(w, resp.Body)
 	}

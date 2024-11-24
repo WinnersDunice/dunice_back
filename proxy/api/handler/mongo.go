@@ -209,3 +209,4 @@ func (h *Handler) DeleteObjectByID(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(resp.StatusCode)
 
 }
+

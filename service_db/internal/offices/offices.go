@@ -2,6 +2,7 @@ package office
 
 import (
 	"database/sql"
+	"log"
 )
 
 type Office struct {
@@ -12,8 +13,11 @@ type Office struct {
 
 // CreateOffice создает новый офис
 func CreateOffice(db *sql.DB, office *Office) error {
+	office.Affiliation =2
+	log.Print(office)
 	query := `INSERT INTO offices (address) VALUES ($1) RETURNING officeid`
 	err := db.QueryRow(query, office.Address).Scan(&office.OfficeID)
+	log.Print(office)
 	return err
 }
 

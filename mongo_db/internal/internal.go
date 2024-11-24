@@ -170,3 +170,37 @@ func DeleteObjectByID(client *mongo.Client, collectionName, id string) error {
 	_, err = collection.DeleteOne(ctx, filter)
 	return err
 }
+type SVGImage struct {
+    Data   []byte `json:"data" bson:"data"`
+    Name   string `json:"name" bson:"name"`
+    OfficeID string `json:"officeId" bson:"officeId"`
+}
+
+// CreateSVGImage создает новое SVG-изображение
+func CreateSVGImage(collection *mongo.Collection, svgImage *SVGImage) error {
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+    defer cancel()
+
+    _, err := collection.InsertOne(ctx, svgImage)
+    return err
+}
+
+// GetSVGImageByID получает SVG-изображение по ID
+func GetSVGImageByID(collection *mongo.Collection, id string) (*SVGImage, error) {
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+    defer cancel()
+
+    objectID, err := primitive.ObjectIDFromHex(id)
+    if err != nil {
+        return nil, err
+    }
+
+    filter := bson.M{"_id": objectID}
+    var svgImage SVGImage
+    err = collection.FindOne(ctx, filter).Decode(&svgImage)
+    if err != nil {
+        return nil, err
+    }
+
+    return &svgImage, nil
+}

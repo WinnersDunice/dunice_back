@@ -7,6 +7,7 @@ type SmallUser struct {
 	Surname    string `json:"surname"`
 	Middlename string `json:"middlename"`
 	MacAddress string `json:"mac_address"`
+	OfficeId   int    `json:"officeid"`
 	Role     int    `json:"privilege_level"`
 }
 
