@@ -27,6 +27,8 @@ func Rout(db *sql.DB) error {
 
 	v1 := chi.NewRouter()
 	api.Mount("/users", v1)
+	v2 := chi.NewRouter()
+	api.Mount("/offices", v2)
 
 	// Create a new user
 	v1.Post("/", func(w http.ResponseWriter, r *http.Request) {
@@ -82,6 +84,21 @@ func Rout(db *sql.DB) error {
 			return
 		}
 		json.NewEncoder(w).Encode(updatedUser)
+	})
+
+	v1.Get("/get/login/{login}", func(w http.ResponseWriter, r *http.Request) {
+		login := chi.URLParam(r, "login")
+		log.Print("z")
+		user, err := us.GetUserByLogin(db, login)
+		if err != nil {
+			if errors.Is(err, sql.ErrNoRows) {
+				http.Error(w, "user not found", http.StatusNotFound)
+				return
+			}
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+			return
+		}
+		json.NewEncoder(w).Encode(user)
 	})
 
 	// Update user login
@@ -217,6 +234,7 @@ func Rout(db *sql.DB) error {
 		}
 		json.NewEncoder(w).Encode(map[string]string{"status": "user deleted"})
 	})
+
 	v1.Post("/auth", func(w http.ResponseWriter, r *http.Request) {
 		type AuthRequest struct {
 			Login    string `json:"login"`
@@ -239,134 +257,48 @@ func Rout(db *sql.DB) error {
 			return
 		}
 		json.NewEncoder(w).Encode(map[string]string{"message": "authentication successful"})
-		v1.Get("/isadmin/{userid}/{officeid}", func(w http.ResponseWriter, r *http.Request) {
-			useridStr := chi.URLParam(r, "userid")
-			officeidStr := chi.URLParam(r, "officeid")
-			userid, err := strconv.Atoi(useridStr)
-			if err != nil {
-				log.Print(err)
-				http.Error(w, "invalid userid", http.StatusBadRequest)
-				return
-			}
-			officeid, err := strconv.Atoi(officeidStr)
-			if err != nil {
-				log.Print(err)
-				http.Error(w, "invalid officeid", http.StatusBadRequest)
-				return
-			}
-			isAdmin, err := us.IsAdmin(db, userid, officeid)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			json.NewEncoder(w).Encode(map[string]bool{"isadmin": isAdmin})
-		})
-	
-		// Make user admin
-		v1.Post("/makeadmin", func(w http.ResponseWriter, r *http.Request) {
-			type MakeAdminRequest struct {
-				UserID    int `json:"userid"`
-				OfficeID  int `json:"officeid"`
-			}
-			var req MakeAdminRequest
-			if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-				http.Error(w, "cannot parse JSON", http.StatusBadRequest)
-				return
-			}
-			if err := us.MakeAdmin(db, req.UserID, req.OfficeID); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			json.NewEncoder(w).Encode(map[string]string{"message": "user made admin successfully"})
-		})
-		v1.Get("/offices", func(w http.ResponseWriter, r *http.Request) {
-			offices, err := us.GetAllOffices(db)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			json.NewEncoder(w).Encode(offices)
-		})
-	
-		// Get all users of an office
-		v1.Get("/offices/{officeid}/users", func(w http.ResponseWriter, r *http.Request) {
-			officeidStr := chi.URLParam(r, "officeid")
-			officeid, err := strconv.Atoi(officeidStr)
-			if err != nil {
-				log.Print(err)
-				http.Error(w, "invalid officeid", http.StatusBadRequest)
-				return
-			}
-			users, err := us.GetUsersByOfficeID(db, officeid)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			json.NewEncoder(w).Encode(users)
-		})
-	
-		// Get the office of a user
-		v1.Get("/{userid}/office", func(w http.ResponseWriter, r *http.Request) {
-			useridStr := chi.URLParam(r, "userid")
-			userid, err := strconv.Atoi(useridStr)
-			if err != nil {
-				log.Print(err)
-				http.Error(w, "invalid userid", http.StatusBadRequest)
-				return
-			}
-			office, err := us.GetOfficeByUserID(db, userid)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			json.NewEncoder(w).Encode(office)
-		})
-	
-	})
-	v1.Get("/offices", func(w http.ResponseWriter, r *http.Request) {
-		offices, err := us.GetAllOffices(db)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		json.NewEncoder(w).Encode(offices)
 	})
 
-	// Get all users of an office
-	v1.Get("/offices/{officeid}/users", func(w http.ResponseWriter, r *http.Request) {
-		officeidStr := chi.URLParam(r, "officeid")
-		officeid, err := strconv.Atoi(officeidStr)
-		if err != nil {
-			log.Print(err)
-			http.Error(w, "invalid officeid", http.StatusBadRequest)
-			return
-		}
-		users, err := us.GetUsersByOfficeID(db, officeid)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		json.NewEncoder(w).Encode(users)
-	})
-
-	// Get the office of a user
-	v1.Get("/get/{userid}/office", func(w http.ResponseWriter, r *http.Request) {
+	v1.Get("/isadmin/{userid}/{officeid}", func(w http.ResponseWriter, r *http.Request) {
 		useridStr := chi.URLParam(r, "userid")
+		officeidStr := chi.URLParam(r, "officeid")
 		userid, err := strconv.Atoi(useridStr)
 		if err != nil {
 			log.Print(err)
 			http.Error(w, "invalid userid", http.StatusBadRequest)
 			return
 		}
-		office, err := us.GetOfficeByUserID(db, userid)
+		officeid, err := strconv.Atoi(officeidStr)
+		if err != nil {
+			log.Print(err)
+			http.Error(w, "invalid officeid", http.StatusBadRequest)
+			return
+		}
+		isAdmin, err := us.IsAdmin(db, userid, officeid)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		json.NewEncoder(w).Encode(office)
+		json.NewEncoder(w).Encode(map[string]bool{"isadmin": isAdmin})
 	})
-	v2 := chi.NewRouter()
-	api.Mount("/offices", v2)
+
+	// Make user admin
+	v1.Post("/makeadmin", func(w http.ResponseWriter, r *http.Request) {
+		type MakeAdminRequest struct {
+			UserID    int `json:"userid"`
+			OfficeID  int `json:"officeid"`
+		}
+		var req MakeAdminRequest
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			http.Error(w, "cannot parse JSON", http.StatusBadRequest)
+			return
+		}
+		if err := us.MakeAdmin(db, req.UserID, req.OfficeID); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		json.NewEncoder(w).Encode(map[string]string{"message": "user made admin successfully"})
+	})
 
 	// Create a new office
 	v2.Post("/", func(w http.ResponseWriter, r *http.Request) {
@@ -379,11 +311,13 @@ func Rout(db *sql.DB) error {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(office)
 	})
 
 	// Get an office by ID
-	v2.Get("/{id}", func(w http.ResponseWriter, r *http.Request) {
+	v2.Get("/getss/{id}", func(w http.ResponseWriter, r *http.Request) {
+		log.Print("q")
 		idStr := chi.URLParam(r, "id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
@@ -439,5 +373,88 @@ func Rout(db *sql.DB) error {
 		}
 		json.NewEncoder(w).Encode(map[string]string{"status": "office deleted"})
 	})
+
+	v2.Get("/gets", func(w http.ResponseWriter, r *http.Request) {
+		log.Print("z")
+		offices, err := us.GetAllOffices(db)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		json.NewEncoder(w).Encode(offices)
+	})
+
+	// Get all users of an office
+	v2.Get("/offices/{officeid}/users", func(w http.ResponseWriter, r *http.Request) {
+		log.Print("t")
+		officeidStr := chi.URLParam(r, "officeid")
+		officeid, err := strconv.Atoi(officeidStr)
+		if err != nil {
+			log.Print(err)
+			http.Error(w, "invalid officeid", http.StatusBadRequest)
+			return
+		}
+		users, err := us.GetUsersByOfficeID(db, officeid)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		json.NewEncoder(w).Encode(users)
+	})
+
+	// Get the office of a user
+	v2.Get("/tmp/{userid}/office", func(w http.ResponseWriter, r *http.Request) {
+		log.Print("v")
+		useridStr := chi.URLParam(r, "userid")
+		userid, err := strconv.Atoi(useridStr)
+		if err != nil {
+			log.Print(err)
+			http.Error(w, "invalid userid", http.StatusBadRequest)
+			return
+		}
+		office, err := us.GetOfficeByUserID(db, userid)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		json.NewEncoder(w).Encode(office)
+	})
+
+	// Get all users of an office
+	v2.Get("/offices/{officeid}/users", func(w http.ResponseWriter, r *http.Request) {
+		log.Print("y")
+		officeidStr := chi.URLParam(r, "officeid")
+		officeid, err := strconv.Atoi(officeidStr)
+		if err != nil {
+			log.Print(err)
+			http.Error(w, "invalid officeid", http.StatusBadRequest)
+			return
+		}
+		users, err := us.GetUsersByOfficeID(db, officeid)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		json.NewEncoder(w).Encode(users)
+	})
+
+	// Get the office of a user
+	v2.Get("/get/{userid}/office", func(w http.ResponseWriter, r *http.Request) {
+		log.Print("zq")
+		useridStr := chi.URLParam(r, "userid")
+		userid, err := strconv.Atoi(useridStr)
+		if err != nil {
+			log.Print(err)
+			http.Error(w, "invalid userid", http.StatusBadRequest)
+			return
+		}
+		office, err := us.GetOfficeByUserID(db, userid)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		json.NewEncoder(w).Encode(office)
+	})
+
 	return http.ListenAndServe(":8003", r)
 }

@@ -12,11 +12,7 @@ import (
 	"github.com/WinnersDunice/dunice_back/proxy/entities"
 )
 
-const (
-	clientID     = "efbba4c352a94b9aac2ce95ea445465c"      // Замените на ваш client_id
-	clientSecret = "bdd7a6ff46954c3cb5b08f31a34892d5"      // Замените на ваш client_secret
-	redirectURI  = "https://api.dunice-net.ru/auth/yandex" // Замените на ваш redirect URI
-)
+
 
 func ValidateSessionMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -111,7 +107,7 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	// Устанавливаем куки из ответа на вход
 	for _, cookie := range resp2.Cookies() {
 		cookie.SameSite = http.SameSiteNoneMode
-		cookie.Domain = ".winnersdunice.ru" // Устанавливаем домен для куки
+		cookie.Domain = ".dunicewinners.ru" // Устанавливаем домен для куки
 		http.SetCookie(w, cookie)
 	}
 

@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-const ssoEndpoint = "http://185.23.236.113:8530/api_auth_dunice_server_sso/validate"
+const ssoEndpoint = "http://195.80.238.9:8530/api_auth_dunice_server_sso/validate"
 
 type UserPrivileges struct {
 	Email      string `json:"email"`

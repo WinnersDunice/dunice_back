@@ -14,6 +14,8 @@ type User struct {
 	Surname    string `json:"surname"`
 	Middlename string `json:"middlename"`
 	MacAddress string `json:"mac_address"`
+	OfficeID int    `json:"officeid"`
+	IsAdmin  bool   `json:"isadmin"`
 }
 
 func HashPassword(password string) string {

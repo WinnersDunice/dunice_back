@@ -26,11 +26,6 @@ func ValidateHandler(store *sessions.CookieStore) http.HandlerFunc {
 			return
 		}
 		log.Print("Session retrieved successfully")
-		a, ok := session.Values["authenticated"].(bool)
-		log.Print("Session authenticated:", a, ok)
-
-		// Логируем значения сессии
-		log.Printf("Session values: %+v", session.Values)
 
 		// Проверяем, аутентифицирован ли пользователь
 		authenticated, ok := session.Values["authenticated"].(bool)
@@ -40,32 +35,41 @@ func ValidateHandler(store *sessions.CookieStore) http.HandlerFunc {
 			return
 		}
 
-		// Логируем userID и уровень привилегий из сессии
-		userID, ok := session.Values["userID"].(int) // Предполагаем, что userID хранится как int
+		// Логируем userID, officeid и isadmin из сессии
+		login, ok := session.Values["login"].(string)
 		if !ok {
-			log.Print("UserID not found in session")
+			log.Print("login not found in session")
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
 		}
 
-		role, ok := session.Values["role"].(int) // Предполагаем, что роль хранится как int
+		officeid, ok := session.Values["officeid"].(int)
 		if !ok {
-			log.Print("Role not found in session")
+			log.Print("OfficeID not found in session")
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
 		}
 
-		log.Printf("UserID from session: %d, Role: %d", userID, role)
+		isadmin, ok := session.Values["isadmin"].(bool)
+		if !ok {
+			log.Print("IsAdmin not found in session")
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		log.Printf("UserID from session: %s, OfficeID: %d, IsAdmin: %t", login, officeid, isadmin)
 
 		// Формируем ответ
 		user := structs.User{
-			UserID: userID,
-			Role:   role,
+			Login:   login,
+			OfficeID: officeid,
+			IsAdmin: isadmin,
 		}
 
 		// Сохраняем данные в контексте
-		ctx := context.WithValue(r.Context(), "userID", userID)
-		ctx = context.WithValue(ctx, "role", role)
+		ctx := context.WithValue(r.Context(), "userID", login)
+		ctx = context.WithValue(ctx, "officeid", officeid)
+		ctx = context.WithValue(ctx, "isadmin", isadmin)
 
 		// Передаем новый контекст дальше
 		r = r.WithContext(ctx)

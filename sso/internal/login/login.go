@@ -40,7 +40,7 @@ func LoginHandler(store *sessions.CookieStore) http.HandlerFunc {
 			return
 		}
 		defer resp.Body.Close()
-		
+
 		if resp.StatusCode != http.StatusOK {
 			log.Print(resp.StatusCode)
 			http.Error(w, "Invalid credentials "+fmt.Sprintf("%d", resp.StatusCode), http.StatusUnauthorized)
@@ -65,29 +65,40 @@ func LoginHandler(store *sessions.CookieStore) http.HandlerFunc {
 			return
 		}
 
+		// Set cookies for userID, officeid, and isadmin
 		http.SetCookie(w, &http.Cookie{
 			Name:     "userID",
-			Value:    fmt.Sprintf("%d", user.UserID),
+			Value:    user.Login,
 			Secure:   true,                  // Убедитесь, что это true, если используете HTTPS
 			HttpOnly: false,                 // Защита от XSS
 			SameSite: http.SameSiteNoneMode, // Для работы в сторонних контекстах
 			MaxAge:   86400,                 // Установите MaxAge, если хотите, чтобы куки сохранялись
 		})
 		http.SetCookie(w, &http.Cookie{
-			Name:     "role",
+			Name:     "officeid",
+			Value:    fmt.Sprintf("%d", user.OfficeID),
 			HttpOnly: false,
-			Value:    fmt.Sprintf("%d", user.Role),
 			SameSite: http.SameSiteNoneMode,
 			Secure:   true,
-			MaxAge:   0,
+			MaxAge:   86400,
 		})
+		http.SetCookie(w, &http.Cookie{
+			Name:     "isadmin",
+			Value:    fmt.Sprintf("%t", user.IsAdmin),
+			HttpOnly: false,
+			SameSite: http.SameSiteNoneMode,
+			Secure:   true,
+			MaxAge:   86400,
+		})
+
 		// Сохраняем значения в сессии
 		session.Values["authenticated"] = true
-		session.Values["userID"] = user.UserID
-		session.Values["role"] = user.Role
+		session.Values["userID"] = user.Login
+		session.Values["officeid"] = user.OfficeID
+		session.Values["isadmin"] = user.IsAdmin
 
 		// Логируем значения перед сохранением
-		log.Printf("Saving session values: authenticated=%v, userID=%d, role=%d", session.Values["authenticated"], session.Values["userID"], session.Values["role"])
+		log.Printf("Saving session values: authenticated=%v, userID=%s, officeid=%d, isadmin=%t", session.Values["authenticated"], session.Values["userID"], session.Values["officeid"], session.Values["isadmin"])
 
 		session.Options.MaxAge = 86400 // 24 hours
 		session.Options.SameSite = http.SameSiteNoneMode

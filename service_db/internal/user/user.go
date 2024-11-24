@@ -1,6 +1,7 @@
 package user
 
 import (
+	"log"
 	"database/sql"
 	"crypto/sha256"
 	"encoding/hex"
@@ -37,11 +38,21 @@ func CreateUser(db *sql.DB, user *User) error {
 	if err != nil {
 		return err
 	}
+	log.Print(user)
 	query := `INSERT INTO users (login, password, name, surname, middlename, mac_address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
 	err = db.QueryRow(query, user.Login, hashedPassword, user.Name, user.Surname, user.Middlename, user.MacAddress).Scan(&user.ID)
 	return err
 }
-
+func GetUserByLogin(db *sql.DB, login string) (*User, error) {
+	query := `SELECT id, login, name, surname, middlename, mac_address FROM users WHERE login = $1`
+	row := db.QueryRow(query, login)
+	user := &User{}
+	err := row.Scan(&user.ID, &user.Login, &user.Name, &user.Surname, &user.Middlename, &user.MacAddress)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
 // GetUserByID получает пользователя по ID
 func GetUserByID(db *sql.DB, id int) (*User, error) {
 	query := `SELECT id, login, name, surname, middlename, mac_address FROM users WHERE id = $1`
