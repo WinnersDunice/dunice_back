@@ -420,23 +420,7 @@ func Rout(db *sql.DB) error {
 		json.NewEncoder(w).Encode(office)
 	})
 
-	// Get all users of an office
-	v2.Get("/{officeid}/users", func(w http.ResponseWriter, r *http.Request) {
-		log.Print("y")
-		officeidStr := chi.URLParam(r, "officeid")
-		officeid, err := strconv.Atoi(officeidStr)
-		if err != nil {
-			log.Print(err)
-			http.Error(w, "invalid officeid", http.StatusBadRequest)
-			return
-		}
-		users, err := us.GetUsersByOfficeID(db, officeid)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		json.NewEncoder(w).Encode(users)
-	})
+
 
 	// Get the office of a user
 	v2.Get("/get/{userid}/office", func(w http.ResponseWriter, r *http.Request) {

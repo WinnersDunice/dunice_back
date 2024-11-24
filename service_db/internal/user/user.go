@@ -179,7 +179,7 @@ func GetAllOffices(db *sql.DB) ([]Office, error) {
 
 // GetUsersByOfficeID retrieves all users of a specific office
 func GetUsersByOfficeID(db *sql.DB, officeID int) ([]User, error) {
-	query := `SELECT u.id, u.login, u.name, u.surname, u.middlename, u.mac_address, u.officeid
+	query := `SELECT u.id, u.login, u.name, u.surname, u.middlename, u.mac_address
               FROM users u
               JOIN user_offices uo ON u.id = uo.userid
               WHERE uo.officeid = $1`
@@ -192,7 +192,7 @@ func GetUsersByOfficeID(db *sql.DB, officeID int) ([]User, error) {
 	var users []User
 	for rows.Next() {
 		var user User
-		if err := rows.Scan(&user.ID, &user.Login, &user.Name, &user.Surname, &user.Middlename, &user.MacAddress, &user.OfficeID); err != nil {
+		if err := rows.Scan(&user.ID, &user.Login, &user.Name, &user.Surname, &user.Middlename, &user.MacAddress); err != nil {
 			return nil, err
 		}
 		users = append(users, user)

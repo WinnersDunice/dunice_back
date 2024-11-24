@@ -224,7 +224,7 @@ func (h *Handler) GetAllOffices(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) GetUsersByOfficeID(w http.ResponseWriter, r *http.Request) {
 	officeid := chi.URLParam(r, "officeid")
-	url := fmt.Sprintf("http://%s:%s/database/offices/%s/users", IP, UsersPort, officeid)
+	url := fmt.Sprintf("http://%s:%s/database/offices/offices/%s/users", IP, UsersPort, officeid)
 	log.Print(url)
 
 	resp, err := http.Get(url)
